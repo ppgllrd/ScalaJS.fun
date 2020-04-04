@@ -1,8 +1,8 @@
 package scalajs.fun.randomWalks
 
 import org.scalajs.dom
-import org.scalajs.dom.html
-import org.scalajs.dom.raw.MouseEvent
+import org.scalajs.dom.html.{Button, Canvas, Div, Element, Label}
+
 import scalajs.fun.util.Periodic
 
 import scala.collection.mutable.ListBuffer
@@ -70,7 +70,7 @@ class RandomWalk(n: Int) {
     }
   }
 
-  private val canvas = dom.document.getElementById("canvas").asInstanceOf[html.Canvas]
+  private val canvas = dom.document.getElementById("canvas").asInstanceOf[Canvas]
   private val g2D = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
 
   private val (width, height) = {
@@ -167,7 +167,7 @@ class RandomWalk(n: Int) {
     }
   }
 
-  val periodic = new Periodic {
+  val periodic: Periodic = new Periodic {
     override val Hz: Int = 60
 
     private var frame = 0
@@ -189,21 +189,20 @@ class RandomWalk(n: Int) {
     }
   }
 
-  private def setupGUI(): html.Element = {
-    val button = dom.document.createElement("button").asInstanceOf[html.Button]
+  private def setupGUI(): Element = {
+    val button = dom.document.createElement("button").asInstanceOf[Button]
     button.innerText = "Go!"
     button.title = "Click for a new random walk"
-    button.onclick = (ev:MouseEvent) => periodic.start()
+    button.onclick = ev => periodic.start()
 
-    val output = dom.document.createElement("output").asInstanceOf[html.Element]
-    output.setAttribute("class", "Label")
+    val output = dom.document.createElement("output").asInstanceOf[Label]
 
-    val div = dom.document.createElement("div").asInstanceOf[html.Div]
-    div.setAttribute("style", "padding: 10px")
+    val div = dom.document.createElement("div").asInstanceOf[Div]
+    div.style.padding = "10px"
     div.appendChild(button)
     div.appendChild(output)
 
-    val h3 = dom.document.createElement("h3").asInstanceOf[html.Element]
+    val h3 = dom.document.createElement("h3")
     h3.innerText = "Self avoiding random walks"
 
     val controls = dom.document.getElementById("controls")
