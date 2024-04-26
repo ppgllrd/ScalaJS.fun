@@ -2,7 +2,7 @@ package scalajs.fun.util
 
 import org.scalajs.dom
 
-trait Periodic {
+trait Periodic:
   val Hz: Int
 
   def onStart(): Unit = {}
@@ -12,34 +12,33 @@ trait Periodic {
   def finished: Boolean = false
 
   private var handleOpt: Option[Int] = None
-  private def go(): Unit = {
+
+  private def go(): Unit =
     onStart()
     val timeout = 1000.0 / Hz
-    val handle = dom.window.setInterval(() => {
-      if(finished)
-        stop()
-      else
-        onTick()
-    }, timeout)
+    val handle = dom.window.setInterval(
+      () => {
+        if finished then
+          stop()
+        else
+          onTick()
+      },
+      timeout
+    )
     handleOpt = Some(handle)
-  }
 
-  def start(): Unit = {
-    handleOpt match {
+  def start(): Unit =
+    handleOpt match
       case None =>
         go()
       case Some(handle) =>
         stop()
         go()
-    }
-  }
 
-  def stop(): Unit = handleOpt match {
+  def stop(): Unit = handleOpt match
     case None =>
       ;
     case Some(handle) =>
       onStop()
       dom.window.clearInterval(handle)
       handleOpt = None
-  }
-}

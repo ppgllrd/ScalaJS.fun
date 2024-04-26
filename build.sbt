@@ -1,12 +1,16 @@
 enablePlugins(ScalaJSPlugin)
 
-name := "ScalaJSfun"
-scalaVersion := "2.13.1"
+name := "ScalaJSFun"
+scalaVersion := "3.4.1"
 
 // This is an application with a main method
 scalaJSUseMainModuleInitializer := true
-mainClass := Some("scalajs.fun.Main")
 
-libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0"
+libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.8.0"
 
-scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(false)) }
+// Add support for the DOM in `run` and `test`
+jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv()
+
+// uTest settings
+libraryDependencies += "com.lihaoyi" %%% "utest" % "0.8.2" % "test"
+testFrameworks += new TestFramework("utest.runner.Framework")

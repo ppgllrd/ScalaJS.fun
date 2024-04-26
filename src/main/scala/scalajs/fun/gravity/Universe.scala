@@ -1,36 +1,25 @@
-/********************************************************************
- * An universe is a collection of bodies
+/**
+ * ****************************************************************** An
+ * universe is a collection of bodies
  *
- * Pepe Gallardo, 2020.
- * Based on Java code by Sedgewick and Kevin Wayne
- *******************************************************************/
+ * Pepe Gallardo, 2020. Based on Java code by Sedgewick and Kevin Wayne
+ */
 
 package scalajs.fun.gravity
 
-class Universe( private val bodies : Array[Body]
-              , val radius : Double
-              ) {
-  def advance(dt : Double) {
-    val fs : Array[Vector] = new Array(bodies.length)
+class Universe(private val bodies: Array[Body], val radius: Double):
 
-    for (i <- 0 until fs.size)
-      fs(i) = Vector(0,0)
+  def advance(dt: Double): Unit =
+    val fs = Array.fill[Vector2D](bodies.length)(Vector2D(0, 0))
 
-    for (i <- 0 until fs.length)
-      for (j <- 0 until fs.length)
-        if (i != j)
+    for i <- fs.indices do
+      for j <- fs.indices do
+        if i != j then
           fs(i) += bodies(i).forceFrom(bodies(j))
 
-    for (i <- 0 until bodies.length)
+    for i <- bodies.indices do
       bodies(i).move(fs(i), dt)
-  }
 
-  def drawOn(g2D : Graphics2D): Unit =
-    for(p <- bodies)
-      p.drawOn(g2D)
-}
-
-object Universe {
-  def apply(bodies : Array[Body], radius : Double) : Universe =
-    new Universe(bodies, radius)
-}
+  def drawOn(g2D: Graphics2D): Unit =
+    for body <- bodies do
+      body.drawOn(g2D)
