@@ -5,7 +5,7 @@
  * Pepe Gallardo, 2020.
  */
 
-package scalajs.fun.gravity
+package scalajs.fun.util
 
 import org.scalajs.dom
 

@@ -96,14 +96,12 @@ class RandomWalk(n: Int):
     g2D.fill()
     g2D.strokeStyle = outline
     g2D.stroke()
-    g2D.closePath()
 
   private def _line(x0: Double, y0: Double, x1: Double, y1: Double): Unit =
     g2D.beginPath()
     g2D.moveTo(x0, y0)
     g2D.lineTo(x1, y1)
     g2D.stroke()
-    g2D.closePath()
 
   private def line(x0: Double, y0: Double, x1: Double, y1: Double): Unit =
     val (p0x, p0y) = coordinates(x0, y0)

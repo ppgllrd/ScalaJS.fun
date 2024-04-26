@@ -12,3 +12,5 @@ object Main:
 
     // val rw = randomWalks.RandomWalk(15)
     // rw.periodic.start()
+
+    // life.Life.run(args)

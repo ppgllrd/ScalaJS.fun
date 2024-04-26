@@ -1,3 +1,10 @@
+/**
+ * ****************************************************************** Simple
+ * periodic objects in scalaJS
+ *
+ * Pepe Gallardo, 2020.
+ */
+
 package scalajs.fun.util
 
 import org.scalajs.dom

@@ -7,6 +7,8 @@
 
 package scalajs.fun.gravity
 
+import scalajs.fun.util.Graphics2D
+
 import scala.math.*
 
 object Body:
@@ -39,4 +41,4 @@ class Body(
     ctx.lineWidth = 2.5 / g2D.scale
     ctx.strokeStyle = "#0000FF"
     ctx.stroke()
-    ctx.closePath()
+

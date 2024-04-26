@@ -8,8 +8,8 @@
 package scalajs.fun.gravity
 
 import org.scalajs.dom
-import org.scalajs.dom.html.{Canvas, Label, Option, Select}
-import scalajs.fun.util.Periodic
+import org.scalajs.dom.html.{Label, Option, Select}
+import scalajs.fun.util.{Animated, Animation, Graphics2D}
 
 val universe1 =
   val radius: Double = 8e10
@@ -56,53 +56,159 @@ val universe5 =
   )
   Universe(bodies, radius)
 
+val planetsParty = Gravity.fromString(
+  """10
+    |4.0e11
+    |8000
+    |300
+    | 0.0e00    0.000e00   0.00e00   0.00e00   2e32 8e9
+    | 6.25e10   0.000e00   0.00e00   5.66e05   6e24 4e9
+    |-6.25e10   0.000e00   0.00e00  -5.66e05   6e24 6e9
+    | 0         6.250e10  -5.66e05   0.00e00   6e24 6.2e9
+    | 0        -6.250e10   5.66e05   0.00e00   6e24 5.5e9
+    | 2.828e11  2.828e11  100000 -100000   1e26 6.4e9
+    | 2.828e11 -2.828e11 -100000 -100000   1e26 6.1e9
+    |-2.828e11 -2.828e11 -100000  100000   1e26 6.8e9
+    |-2.828e11 2.828e11   100000  100000   1e26 5e9
+    |-1.828e11 1.828e11   100000  100000   1e16 4e9
+    |""".stripMargin
+)
+
+val illusion = Gravity.fromString(
+  """16
+    |2.50e11
+    |2000
+    |300
+    | 1.000e11  0.000e00  0.000e00  -2.52664e05 1.000e32 4e9
+    |-1.000e11  0.000e00  0.000e00   2.52664e05 1.000e32 3.5e9
+    | 0.000e00  1.000e11  2.52664e05 0.000e00   1.000e32 3.25e9
+    | 0.000e00 -1.000e11 -2.52664e05 0.000e00   1.000e32 3e9
+    | 1.000e07  0.000e00  0.000e00   0.000e00   1.000e01 5e9
+    | 0.000e00  1.000e07  0.000e00   0.000e00   1.000e01 5e9
+    |-1.000e07  0.000e00  0.000e00   0.000e00   1.000e01 5e9
+    | 0.000e00 -1.000e07  0.000e00   0.000e00   1.000e01 5e9
+    | 1.000e13  1.000e13 -1.000e06  -1.000e06   2.000e32 6e9
+    | 1.000e13 -1.000e13 -1.000e06   1.000e06   2.000e32 6e9
+    |-1.000e13  1.000e13  1.000e06  -1.000e06   2.000e32 6e9
+    |-1.000e13 -1.000e13  1.000e06   1.000e06   2.000e32 6e9
+    | 0.000e00  1.414e13  0.000e00  -1.414e06   2.000e22 6e9
+    | 0.000e00 -1.414e13  0.000e00   1.414e06   2.000e22 6e9
+    |-1.414e13  0.000e00  1.414e06   0.000e00   2.000e22 6e9
+    | 1.414e13  0.000e00 -1.414e06   0.000e00   2.000e22 6e9
+    |""".stripMargin
+)
+
+val dance10 = Gravity.fromString(
+  """10
+   |13.000e11
+   |10000
+   |500
+   | 1.000e11  0              0  129132.5 1e32 5e10
+   |-1.000e11  0              0 -129132.5 1e32 5e10
+   | 2.828e11  2.828e11  100000 -100000   1e26 4e10
+   | 2.828e11 -2.828e11 -100000 -100000   1e26 4e10
+   |-2.828e11 -2.828e11 -100000  100000   1e26 4e10
+   |-2.828e11 2.828e11   100000  100000   1e26 4e10
+   | 9.000e11 0               0   97500   1e24 3e10
+   |-9.000e11 0               0  -97500   1e24 3e10
+   | 0.000    9e11       -97500       0   1e24 3e10
+   | 0.000   -9e11        97500       0   1e24 3e10""".stripMargin
+)
+
+val eightStarRot = Gravity.fromString(
+  """8
+    |22e10
+    |10000
+    |300
+    |6.85e10 0 0 39e3 5e29 4e9
+    |8.125e10 0 0 -31e3 5e29 4e9
+    |11.875e10 0 0 -11e3 5e29 4e9
+    |13.125e10 0 0 -81e3 5e29 4e9
+    |-6.85e10 0 0 -39e3 5e29 4e9
+    |-8.125e10 0 0 31e3 5e29 4e9
+    |-11.875e10 0 0 11e3 5e29 4e9
+    |-13.125e10 0 0 81e3 5e29 4e9""".stripMargin
+)
+
+val spiral = Gravity.fromString(
+  """17
+    |3.0e11
+    |20000
+    |150
+    |  0.0        0.0        0.0       0.0     1.989e30        8e9
+    |  0.0       16.0e10     2.0e4    -2.0e4   5.974e24        6e9
+    |-16.0e10     0.0        2.0e4     2.0e4   5.974e24        6e9
+    |  0.0      -16.0e10    -2.0e4     2.0e4   5.974e24        6e9
+    | 16.0e10     0.0       -2.0e4    -2.0e4   5.974e24        6e9
+    |  6.0e10     6.0e10    -5.0e3     5.0e4   5.974e27        4e9
+    | -6.0e10     6.0e10    -5.0e4    -5.0e3   5.974e27        4e9
+    | -6.0e10    -6.0e10     5.0e3    -5.0e4   5.974e27        4e9
+    |  6.0e10    -6.0e10     5.0e4     5.0e3   5.974e27        4e9
+    | 18.0e10    18.0e10    -1.0e4     1.0e2   6.419e23        6e9
+    |-18.0e10    18.0e10     1.0e2    -1.0e4   6.419e23        6e9
+    |-18.0e10   -18.0e10     1.0e4     1.0e2   6.419e23        6e9
+    | 18.0e10   -18.0e10    -1.0e2     1.0e4   6.419e23        6e9
+    |  0.0       23.0e10     1.0e4    -1.0e4   5.974e23        6e9
+    |-23.0e10     0.0        1.0e4     1.0e4   5.974e23        6e9
+    |  0.0      -23.0e10    -1.0e4     1.0e4   5.974e23        6e9
+    | 23.0e10     0.0       -1.0e4    -1.0e4   5.974e23        6e9""".stripMargin
+)
+
 object Gravity:
+  def fromString(string: String): AnimatedGravity =
+    def int(s: String): Int =
+      s.dropWhile(_.isSpaceChar).toInt
+
+    def double(s: String): Double =
+      s.dropWhile(_.isSpaceChar).toDouble
+
+    val lines = string.linesIterator.filter(_.nonEmpty).toArray
+    val numBodies = int(lines(0))
+    val radius = double(lines(1))
+    val dt = int(lines(2))
+    val Hz = int(lines(3))
+
+    val bodies = lines.drop(4).map { line =>
+      val Array(x, y, vx, vy, m, r) = line.dropWhile(_.isSpaceChar).split(" +").map(double)
+      Body(Vector2D(x, y), Vector2D(vx, vy), m, r)
+    }
+    AnimatedGravity(Universe(bodies, radius), dt, Hz)
+
+  class AnimatedGravity(universe: Universe, dt: Int, override val Hz: Int) extends Animated:
+    override def step(): Unit =
+      universe.advance(dt)
+
+    override def drawOn(g2D: Graphics2D): Unit =
+      universe.drawOn(g2D)
+
+    override val scale: Double = 1.0 / (universe.radius * 2)
+
   def run(args: Array[String]): Unit =
-    val canvas = dom.document.getElementById("canvas").asInstanceOf[Canvas]
-    val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
-    val g2D = Graphics2D(ctx)
 
-    val percent = 0.8
-    val width = (percent * dom.window.innerWidth).toInt
-    val height = (percent * dom.window.innerHeight).toInt
+    val animations = Array(
+      AnimatedGravity(universe1, 3600, 200),
+      AnimatedGravity(universe2, 3600, 200),
+      AnimatedGravity(universe3, 10000, 200),
+      AnimatedGravity(universe4, 35000, 500),
+      AnimatedGravity(universe5, 25000, 500),
+      planetsParty,
+      illusion,
+      dance10,
+      eightStarRot,
+      spiral
+    ).map(Animation(_))
 
-    canvas.width = width
-    canvas.height = height
-
-    val xOffset = width / 2
-    val yOffset = height / 2
-
-    class Runner(val universe: Universe, val dt: Int, val Hz: Int) extends Periodic:
-      private val scale = (width min height) / (universe.radius * 2)
-
-      override def onTick(): Unit =
-        ctx.setTransform(1, 0, 0, 1, 0, 0)
-        ctx.fillStyle = "white"
-        ctx.fillRect(0, 0, width, height)
-        universe.advance(dt)
-        ctx.translate(xOffset, yOffset)
-        g2D.scale = scale
-        universe.drawOn(g2D)
-
-    val runners = Array(
-      Runner(universe1, 3600, 100),
-      Runner(universe2, 3600, 100),
-      Runner(universe3, 5000, 200),
-      Runner(universe4, 25000, 500),
-      Runner(universe5, 25000, 500)
-    )
-
-    object Running:
+    object Executor:
       private var running: scala.Option[Int] = None
 
       def run(i: Int): Unit =
         running match
           case None =>
-            runners(i).start()
+            animations(i).start()
             running = Some(i)
           case Some(j) if i != j =>
-            runners(j).stop()
-            runners(i).start()
+            animations(j).stop()
+            animations(i).start()
             running = Some(i)
           case _ => ;
 
@@ -115,7 +221,7 @@ object Gravity:
       val select = dom.document.createElement("select").asInstanceOf[Select]
       select.title = "select one universe to simulate"
       select.id = id
-      for i <- runners.indices do
+      for i <- animations.indices do
         val option = dom.document.createElement("option").asInstanceOf[Option]
         val str = s"Universe $i"
         option.value = str
@@ -124,7 +230,7 @@ object Gravity:
 
       select.onchange = ev =>
         val i = select.selectedIndex
-        Running.run(i)
+        Executor.run(i)
 
       val h3 = dom.document.createElement("h3")
       h3.innerText = "Gravity"
@@ -135,4 +241,4 @@ object Gravity:
       controls.appendChild(select)
 
     setupGUI()
-    Running.run(0)
+    Executor.run(0)

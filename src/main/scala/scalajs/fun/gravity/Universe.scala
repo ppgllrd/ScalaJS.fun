@@ -7,6 +7,8 @@
 
 package scalajs.fun.gravity
 
+import scalajs.fun.util.Graphics2D
+
 class Universe(private val bodies: Array[Body], val radius: Double):
 
   def advance(dt: Double): Unit =
