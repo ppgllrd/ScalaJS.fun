@@ -5,3 +5,4 @@ Simple examples for playing with [Scala.js](https://www.scala-js.org/).
 
 * [Self avoiding random walks](https://ppgllrd.github.io/ScalaJS.fun/randomWalk/).
 
+* [Game of life](https://ppgllrd.github.io/ScalaJS.fun/life/).
