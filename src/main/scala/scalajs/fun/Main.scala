@@ -7,6 +7,7 @@
 package scalajs.fun
 
 import org.scalajs.dom
+import scalajs.fun.sierpinski.Sierpinski
 
 object Main:
   def main(args: Array[String]): Unit =
@@ -26,5 +27,7 @@ object Main:
       case 1 =>
         val rw = randomWalks.RandomWalk(15)
         rw.periodic.start()
-      case _ =>
+      case 2 =>
         life.Life.run(args)
+      case 3 =>
+        Sierpinski.start() 

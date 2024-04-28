@@ -8,8 +8,7 @@
 package scalajs.fun.randomWalks
 
 import org.scalajs.dom
-import org.scalajs.dom.html.{Button, Canvas, Div, Element, Label}
-
+import org.scalajs.dom.html.*
 import scalajs.fun.util.Periodic
 
 import scala.collection.mutable.ListBuffer
@@ -152,8 +151,6 @@ class RandomWalk(n: Int):
       drawPos(i)
 
   val periodic: Periodic = new Periodic:
-    override val Hz: Int = 60
-
     private var frame = 0
 
     override def finished: Boolean =
@@ -166,7 +163,7 @@ class RandomWalk(n: Int):
       drawBoard()
       frame = 0
 
-    override def onTick(): Unit =
+    override def onTick(elapsed: Double): Unit =
       drawFrame(frame)
       frame += 1
 

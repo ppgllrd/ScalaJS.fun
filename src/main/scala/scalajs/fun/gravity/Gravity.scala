@@ -11,7 +11,7 @@ import org.scalajs.dom
 import org.scalajs.dom.html.{Label, Option, Select}
 import scalajs.fun.util.{Animated, Animation, Graphics2D}
 
-val universe1 =
+val universe0 =
   val radius: Double = 8e10
   val bodies = Array(
     Body(Vector2D(0, 4.5e10), Vector2D(3e4, 0), 2.999e30, 5e9),
@@ -19,7 +19,7 @@ val universe1 =
   )
   Universe(bodies, radius)
 
-val universe2 =
+val universe1 =
   val radius: Double = 8e10
   val bodies = Array(
     Body(Vector2D(0, 4.5e10), Vector2D(3e4, 0), 2.999e30, 5e9),
@@ -28,7 +28,7 @@ val universe2 =
   )
   Universe(bodies, radius)
 
-val universe3 =
+val universe2 =
   val radius: Double = 1e11
   val bodies = Array(
     Body(Vector2D(0, 4.5e10), Vector2D(1e4, 0), 1.5e30, 5e9),
@@ -36,7 +36,7 @@ val universe3 =
   )
   Universe(bodies, radius)
 
-val universe4 =
+val universe3 =
   val radius: Double = 1e11
   val bodies = Array(
     Body(Vector2D(-3.5e10, 0), Vector2D(0, 1.4e3), 3e28, 5e9),
@@ -46,7 +46,7 @@ val universe4 =
   )
   Universe(bodies, radius)
 
-val universe5 =
+val universe4 =
   val radius: Double = 1.6e11
   val bodies = Array(
     Body(Vector2D(-3.5e10, 0), Vector2D(0, 1.4e3), 3e28, 5e9),
@@ -60,7 +60,6 @@ val planetsParty = Gravity.fromString(
   """10
     |4.0e11
     |8000
-    |300
     | 0.0e00    0.000e00   0.00e00   0.00e00   2e32 8e9
     | 6.25e10   0.000e00   0.00e00   5.66e05   6e24 4e9
     |-6.25e10   0.000e00   0.00e00  -5.66e05   6e24 6e9
@@ -77,8 +76,7 @@ val planetsParty = Gravity.fromString(
 val illusion = Gravity.fromString(
   """16
     |2.50e11
-    |2000
-    |300
+    |1800
     | 1.000e11  0.000e00  0.000e00  -2.52664e05 1.000e32 4e9
     |-1.000e11  0.000e00  0.000e00   2.52664e05 1.000e32 3.5e9
     | 0.000e00  1.000e11  2.52664e05 0.000e00   1.000e32 3.25e9
@@ -102,7 +100,6 @@ val dance10 = Gravity.fromString(
   """10
    |13.000e11
    |10000
-   |500
    | 1.000e11  0              0  129132.5 1e32 5e10
    |-1.000e11  0              0 -129132.5 1e32 5e10
    | 2.828e11  2.828e11  100000 -100000   1e26 4e10
@@ -119,7 +116,6 @@ val eightStarRot = Gravity.fromString(
   """8
     |22e10
     |10000
-    |300
     |6.85e10 0 0 39e3 5e29 4e9
     |8.125e10 0 0 -31e3 5e29 4e9
     |11.875e10 0 0 -11e3 5e29 4e9
@@ -134,7 +130,6 @@ val spiral = Gravity.fromString(
   """17
     |3.0e11
     |20000
-    |150
     |  0.0        0.0        0.0       0.0     1.989e30        8e9
     |  0.0       16.0e10     2.0e4    -2.0e4   5.974e24        6e9
     |-16.0e10     0.0        2.0e4     2.0e4   5.974e24        6e9
@@ -166,17 +161,16 @@ object Gravity:
     val numBodies = int(lines(0))
     val radius = double(lines(1))
     val dt = int(lines(2))
-    val Hz = int(lines(3))
 
-    val bodies = lines.drop(4).map { line =>
+    val bodies = lines.drop(3).map { line =>
       val Array(x, y, vx, vy, m, r) = line.dropWhile(_.isSpaceChar).split(" +").map(double)
       Body(Vector2D(x, y), Vector2D(vx, vy), m, r)
     }
-    AnimatedGravity(Universe(bodies, radius), dt, Hz)
+    AnimatedGravity(Universe(bodies, radius), dt)
 
-  class AnimatedGravity(universe: Universe, dt: Int, override val Hz: Int) extends Animated:
-    override def step(): Unit =
-      universe.advance(dt)
+  class AnimatedGravity(universe: Universe, dt: Int) extends Animated:
+    override def step(elapsed: Double): Unit =
+      universe.advance(dt, elapsed)
 
     override def drawOn(g2D: Graphics2D): Unit =
       universe.drawOn(g2D)
@@ -186,11 +180,11 @@ object Gravity:
   def run(args: Array[String]): Unit =
 
     val animations = Array(
-      AnimatedGravity(universe1, 3600, 200),
-      AnimatedGravity(universe2, 3600, 200),
-      AnimatedGravity(universe3, 10000, 200),
-      AnimatedGravity(universe4, 35000, 500),
-      AnimatedGravity(universe5, 25000, 500),
+      AnimatedGravity(universe0, 3600),
+      AnimatedGravity(universe1, 1090),
+      AnimatedGravity(universe2, 10000),
+      AnimatedGravity(universe3, 35000),
+      AnimatedGravity(universe4, 25000),
       planetsParty,
       illusion,
       dance10,

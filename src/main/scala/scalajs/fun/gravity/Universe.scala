@@ -11,7 +11,7 @@ import scalajs.fun.util.Graphics2D
 
 class Universe(private val bodies: Array[Body], val radius: Double):
 
-  def advance(dt: Double): Unit =
+  def advance(dt: Double, elapsed: Double): Unit =
     val fs = Array.fill[Vector2D](bodies.length)(Vector2D(0, 0))
 
     for i <- fs.indices do
@@ -20,7 +20,7 @@ class Universe(private val bodies: Array[Body], val radius: Double):
           fs(i) += bodies(i).forceFrom(bodies(j))
 
     for i <- bodies.indices do
-      bodies(i).move(fs(i), dt)
+      bodies(i).move(fs(i), dt * elapsed / 5)
 
   def drawOn(g2D: Graphics2D): Unit =
     for body <- bodies do

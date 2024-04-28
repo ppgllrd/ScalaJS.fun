@@ -1,7 +1,7 @@
 package scalajs.fun.life
 
 import org.scalajs.dom
-import scalajs.fun.util.{Animated, Graphics2D, Animation}
+import scalajs.fun.util.{Animated, Animation, Graphics2D}
 
 class Life(val n: Int):
   private var cells = Array.ofDim[Boolean](n, n)
@@ -72,15 +72,15 @@ object Life:
     val controls = dom.document.getElementById("controls")
     controls.appendChild(h3)
 
-    class AnimatedLife(val life: Life, override val Hz: Int) extends Animated:
+    class AnimatedLife(val life: Life) extends Animated:
       val scale: Double = 0.9 / life.n
 
-      override def step(): Unit =
+      override def step(elapsed: Double): Unit =
         life.step()
 
       override def drawOn(g2D: Graphics2D): Unit =
         life.drawOn(g2D)
 
-    Animation(AnimatedLife(life1, 60)).start()
+    Animation(AnimatedLife(life1)).start()
 
 val life1 = Life.withInitialization(250, Array(0, 1, 1, 3, 2, 0, 2, 1, 2, 4, 2, 5, 2, 6))
