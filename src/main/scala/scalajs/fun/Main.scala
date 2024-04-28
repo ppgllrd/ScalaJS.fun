@@ -6,11 +6,25 @@
 
 package scalajs.fun
 
+import org.scalajs.dom
+
 object Main:
   def main(args: Array[String]): Unit =
-    gravity.Gravity.run(args)
+    val query = dom.window.location.search
 
-    // val rw = randomWalks.RandomWalk(15)
-    // rw.periodic.start()
+    val opt =
+      if query.startsWith("?") then
+        try
+          query.tail.toInt
+        catch
+          case _ => 0
+      else
+        0
 
-    // life.Life.run(args)
+    opt match
+      case 0 => gravity.Gravity.run(args)
+      case 1 =>
+        val rw = randomWalks.RandomWalk(15)
+        rw.periodic.start()
+      case _ =>
+        life.Life.run(args)
