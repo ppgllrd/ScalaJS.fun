@@ -14,6 +14,7 @@ trait Animated:
   def step(elapsed: Double): Unit
   def drawOn(g2D: Graphics2D): Unit
   val scale: Double
+  val clearCanvas: Option[String] = Some("white")
 
 class Animation(val animated: Animated) extends Periodic:
 
@@ -34,8 +35,11 @@ class Animation(val animated: Animated) extends Periodic:
   override def onTick(elapsed: Double): Unit =
     animated.step(elapsed)
     ctx.setTransform(1, 0, 0, 1, 0, 0)
-    ctx.fillStyle = "white"
-    ctx.fillRect(0, 0, width, height)
+    animated.clearCanvas match
+      case Some(color) =>
+        ctx.fillStyle = color
+        ctx.fillRect(0, 0, width, height)
+      case None => ;
     ctx.translate(xOffset, yOffset)
     g2D.scale = scale
     animated.drawOn(g2D)

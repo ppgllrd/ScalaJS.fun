@@ -1,3 +1,11 @@
+/**
+ * ******************************************************************
+ *
+ * Game of life
+ *
+ * Pepe Gallardo, 2020.
+ */
+
 package scalajs.fun.life
 
 import org.scalajs.dom

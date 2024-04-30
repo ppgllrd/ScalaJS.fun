@@ -1,3 +1,11 @@
+/**
+ * ******************************************************************
+ *
+ * Sierpinski triangle
+ *
+ * Pepe Gallardo, 2020.
+ */
+
 package scalajs.fun.sierpinski
 
 import org.scalajs.dom
