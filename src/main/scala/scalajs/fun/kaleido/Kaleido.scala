@@ -74,3 +74,8 @@ object Kaleido:
 
   def start(): Unit =
     new Animation(AnimatedKaleido).start()
+
+  val h3 = dom.document.createElement("h3")
+  h3.innerText = "Kaleido"
+  val controls = dom.document.getElementById("controls")
+  controls.appendChild(h3)

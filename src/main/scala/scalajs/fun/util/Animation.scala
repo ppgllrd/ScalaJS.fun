@@ -20,7 +20,7 @@ class Animation(val animated: Animated) extends Periodic:
 
   val canvas: Canvas = dom.document.getElementById("canvas").asInstanceOf[Canvas]
   private val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
-  private val g2D: Graphics2D = Graphics2D(ctx)
+  val g2D: Graphics2D = Graphics2D(ctx)
 
   private val (width, height) =
     val percent = 0.8

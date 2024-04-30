@@ -24,8 +24,7 @@ object Main:
     opt match
       case 0 => gravity.Gravity.run(args)
       case 1 =>
-        val rw = randomWalks.RandomWalk(15)
-        rw.periodic.start()
+        val rw = randomWalks.RandomWalk(15).start()
       case 2 =>
         life.Life.run(args)
       case 3 =>
