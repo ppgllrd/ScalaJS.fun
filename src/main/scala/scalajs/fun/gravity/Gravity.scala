@@ -227,7 +227,7 @@ object Gravity:
         Executor.run(i)
 
       val h3 = dom.document.createElement("h3")
-      val title = "Gravityyy"
+      val title = "Gravity"
       h3.innerText = title
       dom.document.title = title
 
