@@ -9,7 +9,7 @@ package scalajs.fun.gravity
 
 import org.scalajs.dom
 import org.scalajs.dom.html.{Label, Option, Select}
-import scalajs.fun.util.{Animated, Animation, Graphics2D}
+import scalajs.fun.util.{Animated, Graphics2D}
 
 val universe0 =
   val radius: Double = 8e10
@@ -169,13 +169,13 @@ object Gravity:
     AnimatedGravity(Universe(bodies, radius), dt)
 
   class AnimatedGravity(universe: Universe, dt: Int) extends Animated:
+    override lazy val scale: Double = 1.0 / (universe.radius * 2)
+
     override def step(elapsed: Double): Unit =
       universe.advance(dt, elapsed)
 
     override def drawOn(g2D: Graphics2D): Unit =
       universe.drawOn(g2D)
-
-    override val scale: Double = 1.0 / (universe.radius * 2)
 
   def run(args: Array[String]): Unit =
 
@@ -190,7 +190,7 @@ object Gravity:
       dance10,
       eightStarRot,
       spiral
-    ).map(Animation(_))
+    )
 
     object Executor:
       private var running: scala.Option[Int] = None
@@ -227,7 +227,9 @@ object Gravity:
         Executor.run(i)
 
       val h3 = dom.document.createElement("h3")
-      h3.innerText = "Gravity"
+      val title = "Gravityyy"
+      h3.innerText = title
+      dom.document.title = title
 
       val controls = dom.document.getElementById("controls")
       controls.appendChild(h3)

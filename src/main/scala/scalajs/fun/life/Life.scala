@@ -8,10 +8,9 @@
 
 package scalajs.fun.life
 
-import org.scalajs.dom
-import scalajs.fun.util.{Animated, Animation, Graphics2D}
+import scalajs.fun.util.{Animated, Graphics2D}
 
-class Life(val n: Int):
+class Life(val n: Int) extends Animated:
   private var cells = Array.ofDim[Boolean](n, n)
 
   private var nextCells = Array.ofDim[Boolean](n, n)
@@ -27,7 +26,7 @@ class Life(val n: Int):
             count += 1
     count
 
-  def step(): Unit =
+  def stepUp(): Unit =
     for i <- 0 until n do
       for j <- 0 until n do
         val count = neighbors(i, j)
@@ -38,21 +37,6 @@ class Life(val n: Int):
 
   def apply(i: Int): Array[Boolean] =
     cells(i)
-
-  def drawOn(g2D: Graphics2D): Unit =
-    val offset = n / 2
-    val ctx = g2D.ctx
-    ctx.beginPath()
-    ctx.strokeStyle = "black"
-    ctx.rect(-offset, -offset, n, n)
-    ctx.stroke()
-
-    val border = 2
-    for i <- border until n - border do
-      for j <- border until n - border do
-        if cells(i)(j) then
-          ctx.fillStyle = "blue"
-          ctx.fillRect(i - offset, j - offset, 1, 1)
 
   def initWith(coordinates: Array[Int]): Unit =
     require(coordinates.length % 2 == 0)
@@ -66,7 +50,25 @@ class Life(val n: Int):
       val y = center + coordinates(i + 1)
       cells(x)(y) = true
 
-  private case class Config(life: Life)
+  title("Game of Life")
+
+  override lazy val scale: Double = 0.9 / n
+
+  override def step(elapsed: Double): Unit =
+    stepUp()
+
+  override def drawOn(g2D: Graphics2D): Unit =
+    val offset = n / 2
+    val ctx = g2D.ctx
+    ctx.strokeStyle = "black"
+    ctx.strokeRect(-offset, -offset, n, n)
+
+    val border = 2
+    for i <- border until n - border do
+      for j <- border until n - border do
+        if cells(i)(j) then
+          ctx.fillStyle = "blue"
+          ctx.fillRect(i - offset, j - offset, 1, 1)
 
 object Life:
   def withInitialization(n: Int, coordinates: Array[Int]): Life =
@@ -75,20 +77,5 @@ object Life:
     life
 
   def run(args: Array[String]): Unit =
-    val h3 = dom.document.createElement("h3")
-    h3.innerText = "Game of Life"
-    val controls = dom.document.getElementById("controls")
-    controls.appendChild(h3)
-
-    class AnimatedLife(val life: Life) extends Animated:
-      val scale: Double = 0.9 / life.n
-
-      override def step(elapsed: Double): Unit =
-        life.step()
-
-      override def drawOn(g2D: Graphics2D): Unit =
-        life.drawOn(g2D)
-
-    Animation(AnimatedLife(life1)).start()
-
-val life1 = Life.withInitialization(250, Array(0, 1, 1, 3, 2, 0, 2, 1, 2, 4, 2, 5, 2, 6))
+    val life1 = Life.withInitialization(250, Array(0, 1, 1, 3, 2, 0, 2, 1, 2, 4, 2, 5, 2, 6))
+    life1.start()

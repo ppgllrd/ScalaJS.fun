@@ -10,12 +10,12 @@ package scalajs.fun.randomWalks
 
 import org.scalajs.dom
 import org.scalajs.dom.html.*
-import scalajs.fun.util.{Animated, Animation, Graphics2D}
+import scalajs.fun.util.{Animated, Graphics2D}
 
 import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
-class RandomWalk(n: Int):
+class RandomWalk(n: Int) extends Animated:
   private val dimension = 2 * n + 1
 
   private def inBorder(n: Int): Boolean =
@@ -135,36 +135,31 @@ class RandomWalk(n: Int):
 
   private var frame = 0
 
-  private val animatedRandomWalk = new Animated:
-    def step(elapsed: Double): Unit =
-      frame += 1
+  override def step(elapsed: Double): Unit =
+    frame += 1
 
-    def drawOn(g2D: Graphics2D): Unit =
-      drawBoard(g2D)
-      for i <- 1 to frame do
-        drawFrame(g2D, i)
+  override def drawOn(g2D: Graphics2D): Unit =
+    drawBoard(g2D)
+    for i <- 1 until frame do
+      drawFrame(g2D, i)
 
-    val scale: Double = 0.95 / dimension
+  override lazy val scale: Double = 0.95 / dimension
 
-  private val animation = new Animation(animatedRandomWalk):
-    override def finished: Boolean =
-      frame >= solution.length
+  override def finished: Boolean =
+    frame >= solution.length
 
-    override def onStart(): Unit =
-      val seed = Random.nextInt(Int.MaxValue)
-      output.innerText = s" Using $seed as random seed"
-      randomSolution(seed)
-      frame = 0
-      animatedRandomWalk.drawOn(g2D)
-
-  def start(): Unit =
-    animation.start()
+  override def onStart(): Unit =
+    val seed = Random.nextInt(Int.MaxValue)
+    output.innerText = s" Using $seed as random seed"
+    randomSolution(seed)
+    frame = 0
+    drawOn(g2D)
 
   private def setupGUI(): Element =
     val button = dom.document.createElement("button").asInstanceOf[Button]
     button.innerText = "Go!"
     button.title = "Click for a new random walk"
-    button.onclick = ev => animation.start()
+    button.onclick = ev => start()
 
     val output = dom.document.createElement("output").asInstanceOf[Label]
 
@@ -173,11 +168,9 @@ class RandomWalk(n: Int):
     div.appendChild(button)
     div.appendChild(output)
 
-    val h3 = dom.document.createElement("h3")
-    h3.innerText = "Self avoiding random walks"
+    title("Self-avoiding random walks")
 
     val controls = dom.document.getElementById("controls")
-    controls.appendChild(h3)
     controls.appendChild(div)
 
     output

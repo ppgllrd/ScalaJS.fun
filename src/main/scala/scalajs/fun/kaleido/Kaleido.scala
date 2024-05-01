@@ -9,7 +9,7 @@
 package scalajs.fun.kaleido
 
 import org.scalajs.dom
-import scalajs.fun.util.{Animated, Animation, Graphics2D}
+import scalajs.fun.util.{Animated, Graphics2D}
 
 import scala.math.*
 
@@ -60,22 +60,15 @@ def kaleido(time: Double, n: Int): List[Shape] =
   )
   polys
 
-object Kaleido:
-  private object AnimatedKaleido extends Animated:
-    private var time = 0.0
-    override def step(elapsed: Double): Unit =
-      time = time + elapsed
+object Kaleido extends Animated:
+  title("Kaleido")
 
-    override def drawOn(g2D: Graphics2D): Unit =
-      for shape <- kaleido(time / 1000, 6) do
-        drawShape(g2D.ctx, shape)
+  private var time = 0.0
+  override def step(elapsed: Double): Unit =
+    time = time + elapsed
 
-    override val scale: Double = 1.0 / 6
+  override lazy val scale: Double = 1.0 / 6
 
-  def start(): Unit =
-    new Animation(AnimatedKaleido).start()
-
-  val h3 = dom.document.createElement("h3")
-  h3.innerText = "Kaleido"
-  val controls = dom.document.getElementById("controls")
-  controls.appendChild(h3)
+  override def drawOn(g2D: Graphics2D): Unit =
+    for shape <- kaleido(time / 1000, 6) do
+      drawShape(g2D.ctx, shape)
