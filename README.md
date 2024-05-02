@@ -11,3 +11,5 @@ Simple examples for playing with [Scala.js](https://www.scala-js.org/).
 * [Sierpinski triangle](https://ppgllrd.github.io/ScalaJS.fun/index.html?3).
 
 * [Kaleido](https://ppgllrd.github.io/ScalaJS.fun/index.html?4).
+
+* [Turtle graphics](https://ppgllrd.github.io/ScalaJS.fun/index.html?5).
