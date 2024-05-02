@@ -39,6 +39,6 @@ object Sierpinski extends Animated:
     val ctx = g2D.ctx
     ctx.fillStyle = color
     for i <- 0 until 100 do
-      ctx.fillRect(point.x, point.y, 0.0001, 0.0001)
+      ctx.fillRect(point.x, point.y, 0.0005, 0.0005)
       val i = scala.util.Random.nextInt(3)
       point = center(point, vertices(i))
