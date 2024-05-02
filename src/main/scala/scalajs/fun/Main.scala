@@ -31,3 +31,5 @@ object Main:
         sierpinski.Sierpinski.start()
       case 4 =>
         kaleido.Kaleido.start()
+      case 5 =>
+        turtle.Turtle.start()
